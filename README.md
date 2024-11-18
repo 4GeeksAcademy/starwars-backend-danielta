@@ -64,3 +64,53 @@ This boilerplate it's 100% read to deploy with Render.com and Herkou in a matter
 This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
 
 You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
+
+## GET all planets and characters:
+
+/get/initial
+
+## GET all users
+
+/users
+
+## GET a users favorites:
+
+/users/<int:id>/favorites
+
+## Add a new user
+
+/users
+{
+"email": "",
+"password": ""
+}
+
+## Delete a user
+
+## Add a character to favorites:
+
+/favorite/character/<int:character_id>
+{
+"name": "",
+"user_id": "",
+"character_id": "" or 0,
+"planet_id": "" or 0
+}
+
+## Add a planet to favorites:
+
+/favorite/planet/<int:planet_id>
+{
+"name": "",
+"user_id": "",
+"character_id": "" or 0,
+"planet_id": "" or 0
+}
+
+## Delete a favorite character:
+
+/favorite/character/<int:user_id>/<int:favorite_id>
+
+## Delete a favorite planet:
+
+/favorite/planet/<int:user_id>/<int:favorite_id>
