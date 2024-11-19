@@ -46,31 +46,36 @@ def sitemap():
 
 @app.route('/get/initial', methods=['GET'])
 def initial():
-    response = requests.get("https://swapi.dev/api/people")
-    people = response.json()['results']
+    # response = requests.get("https://swapi.dev/api/people")
+    # people = response.json()['results']
 
-    if Characters.query.all() == None:
+    if not Characters.query.all():
+        response = requests.get("https://swapi.dev/api/people")
+        people = response.json()['results']
+
         for pers in people:
             char_id = pers['url'].split('/')[-2]
             char = Characters(name = pers['name'], swapi_id = char_id, url = pers['url'], birth_year = pers['birth_year'], gender = pers['gender'], height=pers['height'], skin_color=pers['skin_color'], eye_color=pers['eye_color'])
             db.session.add(char)
             db.session.commit()
 
-        records = Characters.query.all()
-        records = list(map(lambda x: x.serialize(), records))
+    records = Characters.query.all()
+    records = list(map(lambda x: x.serialize(), records))
 
+    # response1 = requests.get("https://swapi.dev/api/planets")
+    # planets = response1.json()['results']
+
+    if not Planets.query.all():
         response1 = requests.get("https://swapi.dev/api/planets")
         planets = response1.json()['results']
-
-    if Planets.query.all() == None:
         for planet in planets:
             planet_id = planet['url'].split('/')[-2]
             plan = Planets(name = planet['name'], swapi_id = planet_id, url = planet['url'], climate=planet['climate'], population=planet['population'], orbital_period=planet['orbital_period'], rotation_period=planet['rotation_period'], diameter=planet['diameter'])
             db.session.add(plan)
             db.session.commit()
 
-        records1 = Planets.query.all()
-        records1 = list(map(lambda x: x.serialize(), records1))
+    records1 = Planets.query.all()
+    records1 = list(map(lambda x: x.serialize(), records1))
 
     lists = {
         "character_records": records,
@@ -118,6 +123,13 @@ def get_users():
     all_users = User.query.all()
     all_users = list(map(lambda x: x.serialize(), all_users))
     return all_users
+
+@app.route('/login', methods=['POST'])
+def find_user():
+    body = request.json
+    user = User.query.filter_by(email=body['email'], password=body['password']).first()
+    user = user.serialize()
+    return jsonify(user)
 
 @app.route('/users', methods=['POST'])
 def handle_person():
